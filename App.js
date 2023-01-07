@@ -128,7 +128,7 @@ import { useState } from 'react';
 export default function App() {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: 'home', title: 'Scan', headerShown: false, focusedIcon: 'camera-iris' },
+    { key: 'home', title: 'Scan', headerShown: false, focusedIcon: 'camera' },
     { key: 'profile', title: 'History', focusedIcon: 'history' },
   ])
 
