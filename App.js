@@ -119,7 +119,9 @@
 
 // ----------------------------
 
-import { Home, Profile } from './pages/Home'
+import { Home, History } from './pages/Home'
+import ImagePicker from './pages/ImagePicker';
+import ScanImage from './pages/ScanImage';
 
 import { BottomNavigation, Provider as PaperProvider, useTheme } from 'react-native-paper'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -128,13 +130,17 @@ import { useState } from 'react';
 export default function App() {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: 'home', title: 'Scan', headerShown: false, focusedIcon: 'camera' },
-    { key: 'profile', title: 'History', focusedIcon: 'history' },
+    { key: 'home', title: 'Scan', headerShown: false, focusedIcon: 'camera-iris' },
+    { key: 'imagePicker', title: 'Image Picker', focusedIcon: 'animation-outline' },
+    { key: 'history', title: 'History', focusedIcon: 'history' },
+    { key: 'scanImage', title: 'Scan Image', focusedIcon: 'history' },
   ])
 
   const renderScene = BottomNavigation.SceneMap({
     home: Home,
-    profile: Profile
+    imagePicker: ImagePicker,
+    history: History,
+    scanImage: ScanImage
   })
 
   return (

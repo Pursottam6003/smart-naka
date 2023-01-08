@@ -20,7 +20,7 @@ const Home = () => {
     );
 }
 
-const Profile = () => {
+const History = () => {
     return (
         <Layout>
             <Text variant="headlineMedium">
@@ -33,4 +33,4 @@ const Profile = () => {
     );
 }
 
-export { Home, Profile }
+export { Home, History }
