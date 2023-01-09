@@ -18,18 +18,18 @@ recordRoutes.route('/vehicle_type').post((req, res) => {
 
 
   getCollection('vehicles', (vehicles) => {
-    let query = { license_plate: req.body.id.toLowerCase() };
+    let query = { license_plate: req.body.id.toUpperCase() };
 
     vehicles.findOne(query)
       .then(result => {
+        console.log(result);
         if (result) {
           let vehicleType = 'Car';
-          if (result.type !== vehicleType.toLowerCase()) {
-            console.log('found: ', result)
-            res.json({...result, license_plate_mismatch: true})
-          }
+          res.json({...result, 
+            license_plate_mismatch: result.type === vehicleType.toLowerCase() ? false : true 
+          })
         }
-        res.json(result); 
+        else { res.json(result) }
       })
       .catch(err => { throw err });
   })

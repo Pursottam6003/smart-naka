@@ -14,6 +14,7 @@ export const Layout = ({ children, pageTitle }) => {
       )}
       <ScrollView style={styles.bodyLayout} contentContainerStyle={'center'}>
         {children}
+        <View style={{padding: 32}}></View>
       </ScrollView>
     </SafeAreaView>
   )

@@ -18,9 +18,9 @@ import { useState } from 'react';
 export default function App() {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: 'home', title: 'Home', headerShown: false, focusedIcon: 'home' },
-    { key: 'imagePicker', title: 'Scan', focusedIcon: 'camera-iris' },
-    { key: 'history', title: 'History', focusedIcon: 'notebook-check-outline', unfocusedIcon: 'notebook-check' },
+    { key: 'home', title: 'Home', headerShown: false, focusedIcon: 'home', unfocusedIcon: 'home-outline' },
+    { key: 'imagePicker', title: 'Scan', focusedIcon: 'camera-iris'},
+    { key: 'history', title: 'History', focusedIcon: 'notebook-check', unfocusedIcon: 'notebook-check-outline' },
   ])
 
   const renderScene = BottomNavigation.SceneMap({

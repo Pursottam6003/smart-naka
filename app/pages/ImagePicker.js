@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import {
-  SafeAreaView,
   View,
   Image,
   Platform,
@@ -22,30 +21,13 @@ const ImagePicker = () => {
   const [text, setText] = useState(null)
   const [stolen, setStolen] = useState(null);
 
-
-
   const [vehicleImg, setVehicleImg] = useState(null);
-  const [response, setResponse] = useState(null);
+  const [licensePlateMismatch, setLicensePlateMismatched] = useState(null);
   const [textScanned, setTextScanned] = useState(false);
-
-  const formData = new FormData();
-  formData.append('file', filePath);
-
 
   const checkLicensePlate = () => {
     console.log('Checking License plate...');
 
-    // var formData = new FormData();
-    // formData.append("file", filePath);
-    // formData.append('id', text);
-
-    // fetch(`${config.API_BASE_URL}/vehicle_type/`, {
-    //   method: 'POST',
-    //   body: formData
-    // }).then(result => result.json())
-    //   .then(resJson => {
-    //     console.log(resJson);
-    //   });
     fetch(`${config.API_BASE_URL}/vehicle_type`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -57,19 +39,13 @@ const ImagePicker = () => {
       .then(result => result.json())
       .then(resJson => {
         console.log(resJson);
-        setResponse(resJson);
-        if (resJson) setStolen(true);
+        if (resJson) {
+          setStolen(true)
+          setLicensePlateMismatched(resJson.license_plate_mismatch);
+        }
         else setStolen(false);
       })
       .catch(err => { console.error(err) });
-
-    // fetch(`${config.API_BASE_URL}/vehicles/${text}`)
-    //   .then(result => result.json())
-    //   .then(resJson => {
-    //     if (resJson) setStolen(true);
-    //     else setStolen(false);
-    //   })
-    //   .catch(err => { console.error(err) });
   }
 
   const resetAll = () => {
@@ -78,7 +54,7 @@ const ImagePicker = () => {
     setText(null);
     setVehicleImg(null);
     setTextScanned(false);
-    setResponse(null);
+    setLicensePlateMismatched(null);
   }
 
   const requestCameraPermission = async () => {
@@ -231,7 +207,7 @@ const ImagePicker = () => {
             <View style={styles.actions}>
               {!text && (
                 <>
-                  <Text style={{ marginBottom: 16 }}>Pick an option to scan license plate</Text>
+                  <Text variant='titleMedium' style={{ marginBottom: 16 }}>Pick an option to scan license plate</Text>
                   <Button
                     style={styles.actionBtn}
                     mode='outlined'
@@ -270,22 +246,24 @@ const ImagePicker = () => {
             )}
             {!vehicleImg && (
               <>
-                <Text style={{ marginBottom: 16 }}>Pick an option to scan the vehicle</Text>
-                <Button
-                  style={styles.actionBtn}
-                  mode='outlined'
-                  onPress={() => captureImage('photo', 2)}
-                >
-                  Launch Camera
-                </Button>
+                <Text variant='titleMedium' style={{ marginBottom: 16 }}>Pick an option to scan the vehicle</Text>
+                <View style={styles.actions}>
+                  <Button
+                    style={styles.actionBtn}
+                    mode='outlined'
+                    onPress={() => captureImage('photo', 2)}
+                  >
+                    Launch Camera
+                  </Button>
 
-                <Button
-                  style={styles.actionBtn}
-                  mode='contained'
-                  onPress={() => chooseFile('photo', 2)}
-                >
-                  Choose image
-                </Button>
+                  <Button
+                    style={styles.actionBtn}
+                    mode='contained'
+                    onPress={() => chooseFile('photo', 2)}
+                  >
+                    Choose image
+                  </Button>
+                </View>
               </>
             )}
             {vehicleImg && (
@@ -302,7 +280,7 @@ const ImagePicker = () => {
           (<>
             {stolen === true && (<>
               <Text variant='displayMedium' style={{ color: 'red', marginBottom: 16 }}>This is a stolen vehicle!</Text>
-              {response.license_plate_mismatch && (
+              {licensePlateMismatch && (
                 <Text variant='displayMedium' style={{ color: 'red', marginBottom: 16 }}>License plate is swapped!</Text>
               )}
             </>)}
