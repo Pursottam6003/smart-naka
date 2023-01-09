@@ -2,10 +2,7 @@
 import React, { useState } from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
-  // Text,
   View,
-  TouchableOpacity,
   Image,
   Platform,
   PermissionsAndroid,
@@ -14,13 +11,10 @@ import {
 import { recognizeText } from '../helpers/helpers';
 
 import styles from '../Stylesheet';
-
 import config from '../config/config'
 
 import { Button, TextInput, Text } from 'react-native-paper';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-
-import TextRecognition from "react-native-text-recognition";
 import { Layout } from '../components/Layout';
 
 const ImagePicker = () => {
@@ -34,6 +28,19 @@ const ImagePicker = () => {
 
   const checkLicensePlate = () => {
     console.log('Checking License plate...');
+
+    // var formData = new FormData();
+    // formData.append("file", filePath);
+    // formData.append('id', text);
+
+    // fetch(`${config.API_BASE_URL}/vehicle_type/`, {
+    //   method: 'POST',
+    //   body: formData
+    // }).then(result => result.json())
+    // .then(resJson => {
+    //   console.log(resJson);
+    // });
+
     console.log(text);
     fetch(`${config.API_BASE_URL}/vehicles/${text}`)
       .then(result => result.json())
@@ -42,6 +49,12 @@ const ImagePicker = () => {
         else setStolen(false);
       })
       .catch(err => { console.error(err) });
+  }
+
+  const resetAll = () => {
+    setFilePath(null);
+    setStolen(false);
+    setText('');
   }
 
   const requestCameraPermission = async () => {
@@ -210,7 +223,7 @@ const ImagePicker = () => {
 
             </View>) : (<>
               <Text variant='displayMedium' style={{ color: 'red' }}>This is a stolen vehicle</Text>
-              <Button mode='contained' onPress={() => { setStolen(false) }}>Find more</Button>
+              <Button mode='contained' onPress={() => { resetAll() }}>Find more</Button>
             </>)
         }
       </SafeAreaView>

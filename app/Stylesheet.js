@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
 
   logoWrapper: {
-    // margin: 40,
+    margin: 40,
     justifyContent: 'center',
     alignItems: 'center'
   },
