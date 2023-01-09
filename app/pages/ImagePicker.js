@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  Text,
+  // Text,
   View,
   TouchableOpacity,
   Image,
@@ -11,52 +11,77 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 
-import { TextInput } from 'react-native-paper';
+import { recognizeText } from '../helpers/helpers';
+
+import styles from '../Stylesheet';
+
+import config from '../config/config'
+
+import { Button, TextInput, Text } from 'react-native-paper';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 import TextRecognition from "react-native-text-recognition";
+import { Layout } from '../components/Layout';
+
 const ImagePicker = () => {
-  const [filePath, setFilePath] = useState({});
-  const [text,setText] = useState('')
+  const [filePath, setFilePath] = useState(null);
+  const [text, setText] = useState('')
+  const [stolen, setStolen] = useState(null);
+
+  const formData = new FormData();
+  formData.append('file', filePath);
+  
+
+  const checkLicensePlate = () => {
+    console.log('Checking License plate...');
+    console.log(text);
+    fetch(`${config.API_BASE_URL}/vehicles/${text}`)
+      .then(result => result.json())
+      .then(resJson => {
+        if (resJson) setStolen(true);
+        else setStolen(false);
+      })
+      .catch(err => { console.error(err) });
+  }
 
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.CAMERA,
-                {
-                    title: 'Camera Permission',
-                    message: 'App needs camera permission',
-                },
-            );
-            // If CAMERA Permission is granted
-            return granted === PermissionsAndroid.RESULTS.GRANTED;
-        } catch (err) {
-            console.warn(err);
-            return false;
-        }
-    } else return true;
-};
-
-const requestExternalWritePermission = async () => {
-    if (Platform.OS === 'android') {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                {
-                    title: 'External Storage Write Permission',
-                    message: 'App needs write permission',
-                },
-            );
-            // If WRITE_EXTERNAL_STORAGE Permission is granted
-            return granted === PermissionsAndroid.RESULTS.GRANTED;
-        } catch (err) {
-            console.warn(err);
-            alert('Write permission err', err);
-        }
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'App needs camera permission',
+          },
+        );
+        // If CAMERA Permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
         return false;
+      }
     } else return true;
-};
+  };
+
+  const requestExternalWritePermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'External Storage Write Permission',
+            message: 'App needs write permission',
+          },
+        );
+        // If WRITE_EXTERNAL_STORAGE Permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        alert('Write permission err', err);
+      }
+      return false;
+    } else return true;
+  };
 
   const captureImage = async (type) => {
     let options = {
@@ -87,14 +112,14 @@ const requestExternalWritePermission = async () => {
           alert(response.errorMessage);
           return;
         }
-        setFilePath(response);
+        setFilePath(response.assets[0]);
 
-        if(response.assets[0].uri)
-        {
-          TextRecognition.recognize(response.assets[0].uri).then(result => {
-            console.log(result.join(' '));
-            setText(result.join(' '));
-          }).catch(err => {throw err});
+        if (response.assets[0].uri) {
+          recognizeText(response.assets[0].uri)
+          .then(result => {
+            setText(result);
+          })
+          .catch(err => { throw err })
         }
       });
     }
@@ -123,111 +148,74 @@ const requestExternalWritePermission = async () => {
         alert(response.errorMessage);
         return;
       }
-      
-      if(response)
-      {
-        TextRecognition.recognize(response.assets[0].uri).then(result => {
-          console.log(result.join(' '));
-          setText(result.join(' '));
-        }).catch(err => {throw err});
-      }
-      setFilePath(response);
-    });
+
+      if (response) {
+        recognizeText(response.assets[0].uri)
+        .then(result => {
+          setText(result);
+          setFilePath(response.assets[0]);
+        })
+        .catch(err => { throw err })
+    }});
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {/* <Text style={styles.titleText}>
-        Example of Image Picker in React Native
-      </Text> */}
-      <View style={styles.container}>
-        {/* <Image
-          source={{
-            uri: 'data:image/jpeg;base64,' + filePath.data,
-          }}
-          style={styles.imageStyle}
-        /> */}
-        {/* <Image
-          source={{ uri: filePath.uri }}
-          style={styles.imageStyle}
-        />
-        <Text style={styles.textStyle}>{filePath.uri}</Text> */}
+    <Layout>
+      <SafeAreaView>
+        {
+          !stolen ?
+            (<View style={styles.container}>
+              {filePath && (
+                <Image
+                  source={{ uri: filePath.uri }}
+                  style={styles.imageStyle}
+                />
+              )}
+              {text && <>
+                <View style={{ flexDirection: 'row' }}>
+                  <TextInput
+                    style={{ flex: 1 }}
+                    mode='outlined'
+                    label='Text recognized'
+                    value={text}
+                    onChangeText={setText}
+                  >
+                  </TextInput>
+                </View>
+              </>}
 
-        
-        {text && <>
-        <TextInput
-        value={text}
-        onChangeText={setText}
-        >
-        </TextInput>
-        </>}
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={() => captureImage('photo')}>
-          <Text style={styles.textStyle}>
-            Launch Camera for Image
-          </Text>
-        </TouchableOpacity>
-        {/* <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={() => captureImage('video')}>
-          <Text style={styles.textStyle}>
-            Launch Camera for Video
-          </Text>
-        </TouchableOpacity> */}
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={() => chooseFile('photo')}>
-          <Text style={styles.textStyle}>Choose Image</Text>
-        </TouchableOpacity>
-        {/* <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={() => chooseFile('video')}>
-          <Text style={styles.textStyle}>Choose Video</Text>
+              <View style={styles.actions}>
+                <Button
+                  style={styles.actionBtn}
+                  mode='outlined'
+                  onPress={() => captureImage('photo')}
+                >
+                  Launch Camera
+                </Button>
 
-        </TouchableOpacity> */}
+                <Button
+                  style={styles.actionBtn}
+                  mode='contained'
+                  onPress={() => chooseFile('photo')}
+                >
+                  Choose image
+                </Button>
 
+                <Button
+                  style={styles.actionBtn}                 
+                 mode='elevated' onPress={checkLicensePlate}>
+                  Check
+                </Button>
+              </View>
 
-  
-      </View>
-    </SafeAreaView>
+            </View>) : (<>
+              <Text variant='displayMedium' style={{ color: 'red' }}>This is a stolen vehicle</Text>
+              <Button mode='contained' onPress={() => { setStolen(false) }}>Find more</Button>
+            </>)
+        }
+      </SafeAreaView>
+    </Layout>
   );
 };
 
 export default ImagePicker;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-  },
-  titleText: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    paddingVertical: 20,
-  },
-  textStyle: {
-    padding: 10,
-    color: 'black',
-    textAlign: 'center',
-  },
-  buttonStyle: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 5,
-    marginVertical: 10,
-    width: 250,
-  },
-  imageStyle: {
-    width: 200,
-    height: 200,
-    margin: 5,
-  },
-});
