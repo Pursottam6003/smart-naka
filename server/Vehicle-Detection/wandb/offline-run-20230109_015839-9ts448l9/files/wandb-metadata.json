@@ -1,0 +1,61 @@
+{
+    "os": "Windows-10-10.0.22621-SP0",
+    "python": "3.10.5",
+    "heartbeatAt": "2023-01-08T20:28:40.370121",
+    "startedAt": "2023-01-08T20:28:39.599786",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--img",
+        "640",
+        "--batch",
+        "16",
+        "--epochs",
+        "50",
+        "--data",
+        "dataset.yaml",
+        "--weights",
+        "yolov5m.pt"
+    ],
+    "state": "running",
+    "program": "C:\\Desktop Files\\Vehicle-Detection\\train.py",
+    "codePath": "train.py",
+    "git": {
+        "remote": "https://github.com/MaryamBoneh/Vehicle-Detection",
+        "commit": "e40fa8b479aed0203d83885231419bb3401bb1f1"
+    },
+    "email": "rahulsah6003@gmail.com",
+    "root": "C:/Desktop Files/Vehicle-Detection",
+    "host": "LAPTOP-T52GNBH2",
+    "username": "asus",
+    "executable": "C:\\Desktop Files\\Vehicle-Detection\\ml\\Scripts\\python.exe",
+    "cpu_count": 4,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 2419.0,
+        "min": 0.0,
+        "max": 2419.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2419.0,
+            "min": 0.0,
+            "max": 2419.0
+        }
+    ],
+    "disk": {
+        "total": 236.98273086547852,
+        "used": 194.49341583251953
+    },
+    "gpu": "NVIDIA GeForce MX330",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce MX330",
+            "memory_total": 2147483648
+        }
+    ],
+    "memory": {
+        "total": 7.701396942138672
+    }
+}

@@ -68,3 +68,10 @@ buck-out/
 ##############
 
 /server/.env
+
+# python
+__pycache__
+runs/detect
+dataset-vehicles-*
+dataset-vehicles/
+ml/

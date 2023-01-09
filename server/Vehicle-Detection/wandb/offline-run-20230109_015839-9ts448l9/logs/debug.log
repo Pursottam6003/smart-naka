@@ -1,0 +1,24 @@
+2023-01-09 01:58:39,601 INFO    MainThread:5724 [wandb_setup.py:_flush():68] Configure stats pid to 5724
+2023-01-09 01:58:39,602 INFO    MainThread:5724 [wandb_setup.py:_flush():68] Loading settings from C:\Users\asus\.config\wandb\settings
+2023-01-09 01:58:39,602 INFO    MainThread:5724 [wandb_setup.py:_flush():68] Loading settings from C:\Desktop Files\Vehicle-Detection\wandb\settings
+2023-01-09 01:58:39,602 INFO    MainThread:5724 [wandb_setup.py:_flush():68] Loading settings from environment variables: {'_require_service': 'True'}
+2023-01-09 01:58:39,602 INFO    MainThread:5724 [wandb_setup.py:_flush():68] Inferring run settings from compute environment: {'program_relpath': 'train.py', 'program': 'C:\\Desktop Files\\Vehicle-Detection\\train.py'}
+2023-01-09 01:58:39,612 INFO    MainThread:5724 [wandb_setup.py:_flush():68] Applying login settings: {'mode': 'offline'}
+2023-01-09 01:58:39,612 INFO    MainThread:5724 [wandb_init.py:_log_setup():476] Logging user logs to C:\Desktop Files\Vehicle-Detection\wandb\offline-run-20230109_015839-9ts448l9\logs\debug.log
+2023-01-09 01:58:39,612 INFO    MainThread:5724 [wandb_init.py:_log_setup():477] Logging internal logs to C:\Desktop Files\Vehicle-Detection\wandb\offline-run-20230109_015839-9ts448l9\logs\debug-internal.log
+2023-01-09 01:58:39,614 INFO    MainThread:5724 [wandb_init.py:init():516] calling init triggers
+2023-01-09 01:58:39,614 INFO    MainThread:5724 [wandb_init.py:init():519] wandb.init called with sweep_config: {}
+config: {'weights': 'yolov5m.pt', 'cfg': '', 'data': 'dataset.yaml', 'hyp': {'lr0': 0.01, 'lrf': 0.2, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 0.05, 'cls': 0.5, 'cls_pw': 1.0, 'obj': 1.0, 'obj_pw': 1.0, 'iou_t': 0.2, 'anchor_t': 4.0, 'fl_gamma': 0.0, 'hsv_h': 0.015, 'hsv_s': 0.7, 'hsv_v': 0.4, 'degrees': 0.0, 'translate': 0.1, 'scale': 0.5, 'shear': 0.0, 'perspective': 0.0, 'flipud': 0.0, 'fliplr': 0.5, 'mosaic': 1.0, 'mixup': 0.0, 'copy_paste': 0.0}, 'epochs': 50, 'batch_size': 16, 'imgsz': 640, 'rect': False, 'resume': False, 'nosave': False, 'noval': False, 'noautoanchor': False, 'evolve': None, 'bucket': '', 'cache': None, 'image_weights': False, 'device': '', 'multi_scale': False, 'single_cls': False, 'adam': False, 'sync_bn': False, 'workers': 8, 'project': 'runs/train', 'entity': None, 'name': 'exp', 'exist_ok': False, 'quad': False, 'linear_lr': False, 'label_smoothing': 0.0, 'upload_dataset': False, 'bbox_interval': -1, 'save_period': -1, 'artifact_alias': 'latest', 'local_rank': -1, 'freeze': 0, 'patience': 30, 'save_dir': 'runs\\train\\exp14'}
+2023-01-09 01:58:39,616 INFO    MainThread:5724 [wandb_init.py:init():569] starting backend
+2023-01-09 01:58:39,616 INFO    MainThread:5724 [wandb_init.py:init():573] setting up manager
+2023-01-09 01:58:39,620 INFO    MainThread:5724 [backend.py:_multiprocessing_setup():102] multiprocessing start_methods=spawn, using: spawn
+2023-01-09 01:58:39,629 INFO    MainThread:5724 [wandb_init.py:init():580] backend started and connected
+2023-01-09 01:58:39,653 INFO    MainThread:5724 [wandb_init.py:init():658] updated telemetry
+2023-01-09 01:58:39,717 INFO    MainThread:5724 [wandb_init.py:init():728] starting run threads in backend
+2023-01-09 01:58:40,534 INFO    MainThread:5724 [wandb_run.py:_console_start():1986] atexit reg
+2023-01-09 01:58:40,534 INFO    MainThread:5724 [wandb_run.py:_redirect():1844] redirect: SettingsConsole.WRAP_RAW
+2023-01-09 01:58:40,534 INFO    MainThread:5724 [wandb_run.py:_redirect():1909] Wrapping output streams.
+2023-01-09 01:58:40,534 INFO    MainThread:5724 [wandb_run.py:_redirect():1931] Redirects installed.
+2023-01-09 01:58:40,535 INFO    MainThread:5724 [wandb_init.py:init():765] run started, returning control to user process
+2023-01-09 01:58:40,538 INFO    MainThread:5724 [wandb_run.py:_config_callback():1163] config_cb None None {'data_dict': {'path': 'Dataset/dataset-vehicles', 'train': 'Dataset\\dataset-vehicles\\images\\train', 'val': 'Dataset\\dataset-vehicles\\images\\val', 'test': None, 'nc': 5, 'names': ['Car', 'Motorcycle', 'Truck', 'Bus', 'Bicycle']}}
+2023-01-09 02:00:11,410 WARNING MsgRouterThr:5724 [router.py:message_loop():77] message_loop has been closed
