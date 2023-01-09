@@ -13,33 +13,33 @@ import { recognizeText } from '../helpers/helpers';
 import styles from '../Stylesheet';
 import config from '../config/config'
 
-import { Button, TextInput, Text } from 'react-native-paper';
+import { Button, TextInput, Text, Appbar } from 'react-native-paper';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { Layout } from '../components/Layout';
 
 const ImagePicker = () => {
   const [filePath, setFilePath] = useState(null);
-  const [text, setText] = useState('')
+  const [text, setText] = useState(null)
   const [stolen, setStolen] = useState(null);
 
   const formData = new FormData();
   formData.append('file', filePath);
-  
+
 
   const checkLicensePlate = () => {
     console.log('Checking License plate...');
 
-    // var formData = new FormData();
-    // formData.append("file", filePath);
-    // formData.append('id', text);
+    var formData = new FormData();
+    formData.append("file", filePath);
+    formData.append('id', text);
 
     // fetch(`${config.API_BASE_URL}/vehicle_type/`, {
     //   method: 'POST',
     //   body: formData
     // }).then(result => result.json())
-    // .then(resJson => {
-    //   console.log(resJson);
-    // });
+    //   .then(resJson => {
+    //     console.log(resJson);
+    //   });
 
     console.log(text);
     fetch(`${config.API_BASE_URL}/vehicles/${text}`)
@@ -53,8 +53,8 @@ const ImagePicker = () => {
 
   const resetAll = () => {
     setFilePath(null);
-    setStolen(false);
-    setText('');
+    setStolen(null);
+    setText(null);
   }
 
   const requestCameraPermission = async () => {
@@ -129,10 +129,10 @@ const ImagePicker = () => {
 
         if (response.assets[0].uri) {
           recognizeText(response.assets[0].uri)
-          .then(result => {
-            setText(result);
-          })
-          .catch(err => { throw err })
+            .then(result => {
+              setText(result);
+            })
+            .catch(err => { throw err })
         }
       });
     }
@@ -164,19 +164,20 @@ const ImagePicker = () => {
 
       if (response) {
         recognizeText(response.assets[0].uri)
-        .then(result => {
-          setText(result);
-          setFilePath(response.assets[0]);
-        })
-        .catch(err => { throw err })
-    }});
+          .then(result => {
+            setText(result);
+            setFilePath(response.assets[0]);
+          })
+          .catch(err => { throw err })
+      }
+    });
   };
 
   return (
-    <Layout>
+    <Layout pageTitle='Check vehicle'>
       <SafeAreaView>
         {
-          !stolen ?
+          stolen === null ?
             (<View style={styles.container}>
               {filePath && (
                 <Image
@@ -184,10 +185,10 @@ const ImagePicker = () => {
                   style={styles.imageStyle}
                 />
               )}
-              {text && <>
+              {text !== null && <>
                 <View style={{ flexDirection: 'row' }}>
                   <TextInput
-                    style={{ flex: 1 }}
+                    style={{ flex: 1 , marginBottom: 16}}
                     mode='outlined'
                     label='Text recognized'
                     value={text}
@@ -198,33 +199,46 @@ const ImagePicker = () => {
               </>}
 
               <View style={styles.actions}>
-                <Button
-                  style={styles.actionBtn}
-                  mode='outlined'
-                  onPress={() => captureImage('photo')}
-                >
-                  Launch Camera
-                </Button>
+                {!text && (
+                  <>
+                  <Button
+                    style={styles.actionBtn}
+                    mode='outlined'
+                    onPress={() => captureImage('photo')}
+                  >
+                    Launch Camera
+                  </Button>
 
-                <Button
-                  style={styles.actionBtn}
-                  mode='contained'
-                  onPress={() => chooseFile('photo')}
-                >
-                  Choose image
-                </Button>
+                  <Button
+                    style={styles.actionBtn}
+                    mode='contained'
+                    onPress={() => chooseFile('photo')}
+                  >
+                    Choose image
+                  </Button>
+                  </>
+                )}
 
-                <Button
-                  style={styles.actionBtn}                 
-                 mode='elevated' onPress={checkLicensePlate}>
-                  Check
-                </Button>
+                {text && (
+                  <Button
+                    style={styles.actionBtn}
+                    mode='elevated' onPress={checkLicensePlate}>
+                    Check
+                  </Button>
+                )}
               </View>
 
-            </View>) : (<>
-              <Text variant='displayMedium' style={{ color: 'red' }}>This is a stolen vehicle</Text>
-              <Button mode='contained' onPress={() => { resetAll() }}>Find more</Button>
+            </View>) : (  
+              (<>
+              {stolen === true && (
+                <Text variant='displayMedium' style={{ color: 'red', marginBottom: 16 }}>This is a stolen vehicle!</Text>
+              )}
+              {stolen === false && (
+                <Text variant='displaySmall' style={{ marginBottom: 16}}>Not a stolen vehicle</Text>
+              )}
+              <Button mode='contained' onPress={() => { resetAll() }}>Check Next</Button>
             </>)
+            )
         }
       </SafeAreaView>
     </Layout>

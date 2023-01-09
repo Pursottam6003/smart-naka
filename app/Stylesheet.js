@@ -7,11 +7,12 @@ const Colors = {
 
 const styles = StyleSheet.create({
   layout: {
-    // flex: 1,
-    // backgroundColor: '#fff',
-    padding: 8,
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    fontFamily: 'Roboto',
+  },
+
+  bodyLayout: {
+    margin: 16,
+    paddingBottom: 64
   },
 
   titleBar: {

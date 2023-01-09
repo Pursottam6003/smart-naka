@@ -6,7 +6,7 @@ import { Layout } from "../components/Layout";
 
 const Home = () => {
     return (
-        <Layout>
+        <Layout pageTitle='Assam Police Smart Naka'>
             <View style={{}}>
                 <Logo />
                 <Text variant="displaySamll">
@@ -24,12 +24,9 @@ const Home = () => {
 
 const History = () => {
     return (
-        <Layout>
-            <Text variant="headlineMedium">
-                History
-            </Text>
+        <Layout pageTitle='History'>
             <ScrollView>
-                <Text>This is profile</Text>
+                <Text>Previous scans will go here...</Text>
             </ScrollView>
         </Layout>
     );
