@@ -22,7 +22,10 @@ const ImagePicker = () => {
   const [text, setText] = useState(null)
   const [stolen, setStolen] = useState(null);
 
+
+
   const [vehicleImg, setVehicleImg] = useState(null);
+  const [response, setResponse] = useState(null);
   const [textScanned, setTextScanned] = useState(false);
 
   const formData = new FormData();
@@ -32,9 +35,9 @@ const ImagePicker = () => {
   const checkLicensePlate = () => {
     console.log('Checking License plate...');
 
-    var formData = new FormData();
-    formData.append("file", filePath);
-    formData.append('id', text);
+    // var formData = new FormData();
+    // formData.append("file", filePath);
+    // formData.append('id', text);
 
     // fetch(`${config.API_BASE_URL}/vehicle_type/`, {
     //   method: 'POST',
@@ -43,13 +46,30 @@ const ImagePicker = () => {
     //   .then(resJson => {
     //     console.log(resJson);
     //   });
-    fetch(`${config.API_BASE_URL}/vehicles/${text}`)
+    fetch(`${config.API_BASE_URL}/vehicle_type`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: text,
+        file: filePath
+      })
+    })
       .then(result => result.json())
       .then(resJson => {
+        console.log(resJson);
+        setResponse(resJson);
         if (resJson) setStolen(true);
         else setStolen(false);
       })
       .catch(err => { console.error(err) });
+
+    // fetch(`${config.API_BASE_URL}/vehicles/${text}`)
+    //   .then(result => result.json())
+    //   .then(resJson => {
+    //     if (resJson) setStolen(true);
+    //     else setStolen(false);
+    //   })
+    //   .catch(err => { console.error(err) });
   }
 
   const resetAll = () => {
@@ -58,6 +78,7 @@ const ImagePicker = () => {
     setText(null);
     setVehicleImg(null);
     setTextScanned(false);
+    setResponse(null);
   }
 
   const requestCameraPermission = async () => {
@@ -175,7 +196,7 @@ const ImagePicker = () => {
           recognizeText(response.assets[0].uri)
             .then(result => {
               setText(result);
-                setFilePath(response.assets[0]);
+              setFilePath(response.assets[0]);
             })
             .catch(err => { throw err })
         }
@@ -279,9 +300,12 @@ const ImagePicker = () => {
 
         </View>) : (
           (<>
-            {stolen === true && (
+            {stolen === true && (<>
               <Text variant='displayMedium' style={{ color: 'red', marginBottom: 16 }}>This is a stolen vehicle!</Text>
-            )}
+              {response.license_plate_mismatch && (
+                <Text variant='displayMedium' style={{ color: 'red', marginBottom: 16 }}>License plate is swapped!</Text>
+              )}
+            </>)}
             {stolen === false && (
               <Text variant='displaySmall' style={{ marginBottom: 16 }}>Not a stolen vehicle</Text>
             )}
