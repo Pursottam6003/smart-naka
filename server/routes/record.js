@@ -13,6 +13,29 @@ recordRoutes.route('/vehicles').get((req, res) => {
   })
 });
 
+recordRoutes.route('/vehicle_type').post((req, res) => {
+  console.log(req.body);
+
+
+  getCollection('vehicles', (vehicles) => {
+    let query = { license_plate: req.body.id.toLowerCase() };
+
+    vehicles.findOne(query)
+      .then(result => {
+        if (result) {
+          let vehicleType = 'Car';
+          if (result.type !== vehicleType.toLowerCase()) {
+            console.log('found: ', result)
+            res.json({...result, license_plate_mismatch: true})
+          }
+        }
+        res.json(result); 
+      })
+      .catch(err => { throw err });
+  })
+  res.status(200);  
+})
+
 // ID is license plate number
 recordRoutes.route('/vehicles/:id').get((req, res) => {
   getCollection('vehicles', (vehicles) => {

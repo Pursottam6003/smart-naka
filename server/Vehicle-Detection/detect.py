@@ -52,6 +52,7 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
         hide_labels=False,  # hide labels
         hide_conf=False,  # hide confidences
         half=False,  # use FP16 half-precision inference
+        vehicle_shape=''
         ):
     save_img = not nosave and not source.endswith('.txt')  # save inference images
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
@@ -192,6 +193,8 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
                     n = (det[:, -1] == c).sum()  # detections per class
                     s += f"{n} {names[int(c)]}{' ' * (n > 1)}, "  # add to string
 
+                vehicle_shape = names[int(c)]
+
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
                     if save_txt:  # Write to file
@@ -243,6 +246,7 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
         strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
 
     print(f'Done. ({time.time() - t0:.3f}s)')
+    return vehicle_shape
 
 
 def parse_opt():
@@ -279,7 +283,11 @@ def parse_opt():
 def main(opt):
     print(colorstr('detect: ') + ', '.join(f'{k}={v}' for k, v in vars(opt).items()))
     check_requirements(exclude=('tensorboard', 'thop'))
-    run(**vars(opt))
+
+    result = run(**vars(opt))
+
+    with open('result.txt', 'w') as out:
+        out.write(result)
 
 
 if __name__ == "__main__":
