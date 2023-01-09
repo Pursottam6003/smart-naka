@@ -153,7 +153,7 @@ const ImagePicker = () => {
         recognizeText(response.assets[0].uri)
         .then(result => {
           setText(result);
-          setFilePath(response);
+          setFilePath(response.assets[0]);
         })
         .catch(err => { throw err })
     }});
