@@ -25,8 +25,32 @@ const ImagePicker = () => {
   const [licensePlateMismatch, setLicensePlateMismatched] = useState(null);
   const [textScanned, setTextScanned] = useState(false);
 
+
+  const createFormData = (photo, body) => {
+    const data = new FormData();
+
+    data.append("photo", {
+      name: photo.fileName,
+      type: photo.type,
+      uri:
+        Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
+    });
+
+    Object.keys(body).forEach(key => {
+      data.append(key, body[key]);
+    });
+
+    return data;
+  };
+
   const checkLicensePlate = () => {
     console.log('Checking License plate...');
+
+    let body = new FormData();
+    body.append('id', text);
+    body.append('file', {
+      uri: filePath.uri, name: filePath.type, filename: filePath.fileName, type: filePath.type
+    })
 
     fetch(`${config.API_BASE_URL}/vehicle_type`, {
       method: 'POST',

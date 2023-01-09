@@ -12,7 +12,7 @@ Steps to Clone the repository
 
 **Working Demo** 
 ```
- Step 1 Home Page
+Step 1 Home Page
 ```
 <img src="app/media/ReadmeImages/img1.jpg" width="300" alt="Home" title="Home title">
 <!-- 
