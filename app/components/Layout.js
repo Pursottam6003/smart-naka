@@ -7,9 +7,11 @@ import styles from "../Stylesheet";
 export const Layout = ({ children, pageTitle }) => {
   return (
     <SafeAreaView>
-      <Appbar.Header>
-        <Appbar.Content title={pageTitle} />
-      </Appbar.Header>
+      {pageTitle && (
+        <Appbar.Header>
+          <Appbar.Content title={pageTitle} />
+        </Appbar.Header>
+      )}
       <ScrollView style={styles.bodyLayout} contentContainerStyle={'center'}>
         {children}
       </ScrollView>

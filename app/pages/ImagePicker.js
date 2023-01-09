@@ -22,6 +22,9 @@ const ImagePicker = () => {
   const [text, setText] = useState(null)
   const [stolen, setStolen] = useState(null);
 
+  const [vehicleImg, setVehicleImg] = useState(null);
+  const [textScanned, setTextScanned] = useState(false);
+
   const formData = new FormData();
   formData.append('file', filePath);
 
@@ -40,8 +43,6 @@ const ImagePicker = () => {
     //   .then(resJson => {
     //     console.log(resJson);
     //   });
-
-    console.log(text);
     fetch(`${config.API_BASE_URL}/vehicles/${text}`)
       .then(result => result.json())
       .then(resJson => {
@@ -55,6 +56,8 @@ const ImagePicker = () => {
     setFilePath(null);
     setStolen(null);
     setText(null);
+    setVehicleImg(null);
+    setTextScanned(false);
   }
 
   const requestCameraPermission = async () => {
@@ -96,7 +99,7 @@ const ImagePicker = () => {
     } else return true;
   };
 
-  const captureImage = async (type) => {
+  const captureImage = async (type, stage) => {
     let options = {
       mediaType: type,
       maxWidth: 300,
@@ -125,20 +128,23 @@ const ImagePicker = () => {
           alert(response.errorMessage);
           return;
         }
-        setFilePath(response.assets[0]);
-
-        if (response.assets[0].uri) {
-          recognizeText(response.assets[0].uri)
-            .then(result => {
-              setText(result);
-            })
-            .catch(err => { throw err })
+        if (stage === 2) {
+          setVehicleImg(response.assets[0]);
+        } else {
+          if (response.assets[0].uri) {
+            recognizeText(response.assets[0].uri)
+              .then(result => {
+                setText(result);
+              })
+              .catch(err => { throw err })
+          }
+          setFilePath(response.assets[0]);
         }
       });
     }
   };
 
-  const chooseFile = (type) => {
+  const chooseFile = (type, stage) => {
     let options = {
       mediaType: type,
       maxWidth: 300,
@@ -163,48 +169,52 @@ const ImagePicker = () => {
       }
 
       if (response) {
-        recognizeText(response.assets[0].uri)
-          .then(result => {
-            setText(result);
-            setFilePath(response.assets[0]);
-          })
-          .catch(err => { throw err })
+        if (stage === 2) {
+          setVehicleImg(response.assets[0]);
+        } else {
+          recognizeText(response.assets[0].uri)
+            .then(result => {
+              setText(result);
+                setFilePath(response.assets[0]);
+            })
+            .catch(err => { throw err })
+        }
       }
     });
   };
 
   return (
-    <Layout pageTitle='Check vehicle'>
-      <SafeAreaView>
-        {
-          stolen === null ?
-            (<View style={styles.container}>
-              {filePath && (
-                <Image
-                  source={{ uri: filePath.uri }}
-                  style={styles.imageStyle}
-                />
-              )}
-              {text !== null && <>
-                <View style={{ flexDirection: 'row' }}>
-                  <TextInput
-                    style={{ flex: 1 , marginBottom: 16}}
-                    mode='outlined'
-                    label='Text recognized'
-                    value={text}
-                    onChangeText={setText}
-                  >
-                  </TextInput>
-                </View>
-              </>}
+    <Layout pageTitle=''>
+      {stolen === null ?
+        (<View style={styles.container}>
+          {!textScanned && (<>
+            {filePath && (
+              <Image
+                source={{ uri: filePath.uri }}
+                style={styles.imageStyle}
+              />
+            )}
+            {text !== null && <>
+              <View style={{ flexDirection: 'row' }}>
+                <TextInput
+                  style={{ flex: 1, marginBottom: 16 }}
+                  mode='outlined'
+                  label='Text recognized'
+                  value={text}
+                  onChangeText={setText}
+                >
+                </TextInput>
+              </View>
+            </>}
 
-              <View style={styles.actions}>
-                {!text && (
-                  <>
+            <View style={styles.actions}>
+              {!text && (
+                <>
+                  <Text style={{ marginBottom: 16 }}>Pick an option to scan license plate</Text>
                   <Button
                     style={styles.actionBtn}
                     mode='outlined'
-                    onPress={() => captureImage('photo')}
+                    onPress={() => captureImage('photo', 1)}
                   >
                     Launch Camera
                   </Button>
@@ -212,35 +222,73 @@ const ImagePicker = () => {
                   <Button
                     style={styles.actionBtn}
                     mode='contained'
-                    onPress={() => chooseFile('photo')}
+                    onPress={() => chooseFile('photo', 1)}
                   >
                     Choose image
                   </Button>
-                  </>
-                )}
-
-                {text && (
-                  <Button
-                    style={styles.actionBtn}
-                    mode='elevated' onPress={checkLicensePlate}>
-                    Check
-                  </Button>
-                )}
-              </View>
-
-            </View>) : (  
-              (<>
-              {stolen === true && (
-                <Text variant='displayMedium' style={{ color: 'red', marginBottom: 16 }}>This is a stolen vehicle!</Text>
+                </>
               )}
-              {stolen === false && (
-                <Text variant='displaySmall' style={{ marginBottom: 16}}>Not a stolen vehicle</Text>
-              )}
-              <Button mode='contained' onPress={() => { resetAll() }}>Check Next</Button>
-            </>)
-            )
-        }
-      </SafeAreaView>
+
+              {text && (<>
+                <Button
+                  style={styles.actionBtn}
+                  mode='elevated' onPress={() => { setTextScanned(true) }}>
+                  Next
+                </Button>
+              </>)}
+            </View>
+
+          </>)}
+
+          {textScanned && (<>
+            {vehicleImg && (
+              <Image
+                source={{ uri: vehicleImg.uri }}
+                style={styles.imageStyle}
+              />
+            )}
+            {!vehicleImg && (
+              <>
+                <Text style={{ marginBottom: 16 }}>Pick an option to scan the vehicle</Text>
+                <Button
+                  style={styles.actionBtn}
+                  mode='outlined'
+                  onPress={() => captureImage('photo', 2)}
+                >
+                  Launch Camera
+                </Button>
+
+                <Button
+                  style={styles.actionBtn}
+                  mode='contained'
+                  onPress={() => chooseFile('photo', 2)}
+                >
+                  Choose image
+                </Button>
+              </>
+            )}
+            {vehicleImg && (
+              <Button
+                style={styles.actionBtn}
+                mode='elevated' onPress={() => { checkLicensePlate() }}>
+                Check
+              </Button>
+            )}
+          </>)}
+
+
+        </View>) : (
+          (<>
+            {stolen === true && (
+              <Text variant='displayMedium' style={{ color: 'red', marginBottom: 16 }}>This is a stolen vehicle!</Text>
+            )}
+            {stolen === false && (
+              <Text variant='displaySmall' style={{ marginBottom: 16 }}>Not a stolen vehicle</Text>
+            )}
+            <Button mode='contained' onPress={() => { resetAll() }}>Check Next</Button>
+          </>)
+        )
+      }
     </Layout>
   );
 };

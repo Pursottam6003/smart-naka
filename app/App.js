@@ -18,8 +18,8 @@ import { useState } from 'react';
 export default function App() {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: 'home', title: 'Scan', headerShown: false, focusedIcon: 'camera-iris' },
-    { key: 'imagePicker', title: 'Image Picker', focusedIcon: 'animation-outline' },
+    { key: 'home', title: 'Home', headerShown: false, focusedIcon: 'home' },
+    { key: 'imagePicker', title: 'Scan', focusedIcon: 'camera-iris' },
     { key: 'history', title: 'History', focusedIcon: 'notebook-check-outline', unfocusedIcon: 'notebook-check' },
   ])
 

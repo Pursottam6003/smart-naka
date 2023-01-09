@@ -13,7 +13,6 @@ const Home = () => {
                     Scan any vehicle at Naka and check
                     if it is in the stolen vehicles database
                 </Text>
-
                 <Button dark={true} onPress={() => { }} >
                     Go
                 </Button>
