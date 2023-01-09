@@ -6,8 +6,8 @@ Please check the PDF [Link]('https://drive.google.com/file/d/1Nr3nhFW_a3BHKXObGp
 
 Steps to Clone the repository 
 ## Demo
-* Video Link [Link]('https://www.youtube.com/watch?v=jEDzbeAV_xY')
-* Replit Link [Link]('https://replit.com/@devkanyal13/smart-naka')
+* Video Link [Link](https://www.youtube.com/watch?v=jEDzbeAV_xY)
+* Replit Link [Link](https://replit.com/@devkanyal13/smart-naka)
 
 
 **Working Demo** 
