@@ -9,9 +9,9 @@ const styles = StyleSheet.create({
   layout: {
     // flex: 1,
     // backgroundColor: '#fff',
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 8,
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
 
   titleBar: {
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
 
   logoWrapper: {
-    margin: 40,
+    // margin: 40,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -27,8 +27,42 @@ const styles = StyleSheet.create({
   logo: {
     height: 200,
     width: 200,
-    resizeMode: "contain"
-  }
+    resizeMode: "contain",
+    margin: 8
+  },
+  
+  actions: {
+    margin: 1
+  },
+
+  actionBtn: {
+    margin: 4
+  },
+
+  // imagepicker
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+  },
+  titleText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingVertical: 20,
+  },
+  textStyle: {
+    padding: 10,
+    color: 'black',
+    textAlign: 'center',
+  },
+  imageStyle: {
+    width: 300,
+    height: 300,
+    margin: 5,
+    marginBottom: 16
+  },
 });
 
 

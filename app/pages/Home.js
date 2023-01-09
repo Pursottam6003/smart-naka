@@ -7,15 +7,17 @@ import { Layout } from "../components/Layout";
 const Home = () => {
     return (
         <Layout>
-            <Logo />
-            <Text variant="displaySamll">
-                Scan any vehicle at Naka and check
-                if it is in the stolen vehicles database
-            </Text>
+            <View style={{}}>
+                <Logo />
+                <Text variant="displaySamll">
+                    Scan any vehicle at Naka and check
+                    if it is in the stolen vehicles database
+                </Text>
 
-            <Button dark={true} onPress={() => { }} >
-                Go
-            </Button>
+                <Button dark={true} onPress={() => { }} >
+                    Go
+                </Button>
+            </View>
         </Layout>
     );
 }
