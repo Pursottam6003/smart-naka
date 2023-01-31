@@ -6,12 +6,12 @@ import { Layout } from "../components/Layout";
 
 const Home = () => {
     return (
-        <Layout pageTitle='Assam Police Smart Naka'>
+        <Layout pageTitle='Airavat Smart Guard'>
             <View style={{}}>
                 <Logo />
                 <Text variant="displaySamll">
-                    Scan any vehicle at Naka and check
-                    if it is in the stolen vehicles database
+                    Scan any vehicle at Entrance Gate & check
+                    the vehicles details 
                 </Text>
                 <Button dark={true} onPress={() => { }} >
                     Go
